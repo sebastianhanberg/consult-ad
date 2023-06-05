@@ -4,7 +4,7 @@ export default function CreateUser() {
   // States for registration
   const [firstName, setFirstName] = useState("");
   const [surName, setSurName] = useState("");
-  const [email, setEmail] = useState("");
+  const [userPrincipalName, setUserPrincipalName] = useState("");
 
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
@@ -23,6 +23,7 @@ export default function CreateUser() {
     setSubmitted(false);
     setShowSuccessMessage(false);
     setShowErrorMessage(false);
+    updateUPN(e.target.value, surName); // Update email based on new first name
   };
 
   const handleSurName = (e) => {
@@ -30,20 +31,22 @@ export default function CreateUser() {
     setSubmitted(false);
     setShowSuccessMessage(false);
     setShowErrorMessage(false);
+    updateUPN(firstName, e.target.value); // Update email based on new surname
   };
 
-  // Handling the email change
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-    setSubmitted(false);
-    setShowSuccessMessage(false);
-    setShowErrorMessage(false);
+  // Function to update the email based on first name and surname
+  const updateUPN = (firstName, surName) => {
+    const initials =
+      firstName.slice(0, 2).toUpperCase() + surName.slice(0, 2).toUpperCase();
+    const currentYear = new Date().getFullYear();
+    const newUPN = `${initials}${currentYear}@upplandsvasby.se`;
+    setUserPrincipalName(newUPN);
   };
 
   // Handling the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (firstName === "" || surName === "" || email === "") {
+    if (firstName === "" || surName === "" || userPrincipalName === "") {
       setError(true);
       setShowErrorMessage(true);
     } else {
@@ -55,7 +58,7 @@ export default function CreateUser() {
       const submittedData = {
         firstName: firstName,
         surName: surName,
-        email: email,
+        userPrincipalName: userPrincipalName,
       };
 
       setConsultant(submittedData); // Save the submitted object in the consultant state
@@ -64,7 +67,7 @@ export default function CreateUser() {
 
       setFirstName(""); // Reset firstName to empty string
       setSurName(""); // Reset surName to empty string
-      setEmail(""); // Reset email to empty string
+      setUserPrincipalName(""); // Reset email to empty string
     }
   };
 
@@ -136,17 +139,8 @@ export default function CreateUser() {
             />
           </div>
 
-          <div className="flex flex-col max-w-[224px]">
-            <label className="label font-semibold text-lg flex justify-start mr-4">
-              Email
-            </label>
-            <input
-              onChange={handleEmail}
-              className="input border-2 border-gray-900 rounded-md"
-              value={email}
-              type="email"
-            />
-          </div>
+          {/* No email input field in the JSX */}
+
           <button
             onClick={handleSubmit}
             className="btn bg-green-800 text-lg text-white font-semibold rounded-md px-4 py-1 mt-5 max-w-[124px]"
