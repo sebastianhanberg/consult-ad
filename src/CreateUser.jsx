@@ -2,8 +2,8 @@ import { useState } from "react";
 
 export default function CreateUser() {
   // States for registration
-  const [firstName, setFirstName] = useState("");
-  const [surName, setSurName] = useState("");
+  const [givenName, setGivenName] = useState("");
+  const [surname, setSurname] = useState("");
   const [userPrincipalName, setUserPrincipalName] = useState("");
 
   // States for checking the errors
@@ -18,26 +18,30 @@ export default function CreateUser() {
   const [consultant, setConsultant] = useState(null);
 
   // Handling the name change
-  const handleFirstName = (e) => {
-    setFirstName(e.target.value);
+  const handleGivenName = (e) => {
+    setGivenName(
+      e.target.value.slice(0, 1).toUpperCase() + e.target.value.slice(1)
+    );
     setSubmitted(false);
     setShowSuccessMessage(false);
     setShowErrorMessage(false);
-    updateUPN(e.target.value, surName); // Update email based on new first name
+    updateUPN(e.target.value, surname); // Update email based on new first name
   };
 
-  const handleSurName = (e) => {
-    setSurName(e.target.value);
+  const handleSurname = (e) => {
+    setSurname(
+      e.target.value.slice(0, 1).toUpperCase() + e.target.value.slice(1)
+    );
     setSubmitted(false);
     setShowSuccessMessage(false);
     setShowErrorMessage(false);
-    updateUPN(firstName, e.target.value); // Update email based on new surname
+    updateUPN(givenName, e.target.value); // Update email based on new surname
   };
 
   // Function to update the email based on first name and surname
-  const updateUPN = (firstName, surName) => {
+  const updateUPN = (givenName, surname) => {
     const initials =
-      firstName.slice(0, 2).toUpperCase() + surName.slice(0, 2).toUpperCase();
+      givenName.slice(0, 2).toUpperCase() + surname.slice(0, 2).toUpperCase();
     const currentYear = new Date().getFullYear();
     const newUPN = `${initials}${currentYear}@upplandsvasby.se`;
     setUserPrincipalName(newUPN);
@@ -46,7 +50,7 @@ export default function CreateUser() {
   // Handling the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (firstName === "" || surName === "" || userPrincipalName === "") {
+    if (givenName === "" || surname === "" || userPrincipalName === "") {
       setError(true);
       setShowErrorMessage(true);
     } else {
@@ -56,8 +60,8 @@ export default function CreateUser() {
 
       // Create an object with the submitted values
       const submittedData = {
-        firstName: firstName,
-        surName: surName,
+        givenName: givenName,
+        surname: surname,
         userPrincipalName: userPrincipalName,
       };
 
@@ -65,24 +69,25 @@ export default function CreateUser() {
 
       console.log(submittedData); // Log the submitted object to the console
 
-      setFirstName(""); // Reset firstName to empty string
-      setSurName(""); // Reset surName to empty string
+      setGivenName(""); // Reset givenName to empty string
+      setSurname(""); // Reset surname to empty string
       setUserPrincipalName(""); // Reset email to empty string
     }
   };
 
   // Showing success message
   const successMessage = () => {
-    return (
-      <div
-        className="success"
-        style={{
-          display: showSuccessMessage ? "" : "none",
-        }}
-      >
-        <h1>Konsultkonto {firstName + " " + surName} har registrerats!</h1>
-      </div>
-    );
+    if (submitted && consultant) {
+      return (
+        <div className="success">
+          <h1>
+            Konsultkonto {consultant.givenName + " " + consultant.surname} har
+            registrerats!
+          </h1>
+        </div>
+      );
+    }
+    return null;
   };
 
   // Showing error message if error is true
@@ -120,9 +125,9 @@ export default function CreateUser() {
               Förnamn
             </label>
             <input
-              onChange={handleFirstName}
+              onChange={handleGivenName}
               className="input border-2 border-gray-900 rounded-md"
-              value={firstName}
+              value={givenName}
               type="text"
             />
           </div>
@@ -132,9 +137,9 @@ export default function CreateUser() {
               Efternamn
             </label>
             <input
-              onChange={handleSurName}
+              onChange={handleSurname}
               className="input border-2 border-gray-900 rounded-md"
-              value={surName}
+              value={surname}
               type="text"
             />
           </div>
