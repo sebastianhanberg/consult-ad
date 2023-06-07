@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function CreateUser() {
   // States for registration
@@ -6,6 +7,8 @@ export default function CreateUser() {
   const [surname, setSurname] = useState("");
   const [userPrincipalName, setUserPrincipalName] = useState("");
   const [mobile, setMobile] = useState("");
+  const [jobTitle, setJobTitle] = useState(""); // Added state for job title
+
 
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
@@ -53,6 +56,10 @@ export default function CreateUser() {
     
   };
 
+  const handleJobTitle = (e) => {
+    setJobTitle(e.target.value);
+  };
+
   // Function to update the email based on first name and surname
   const updateUPN = (givenName, surname) => {
     const initials =
@@ -73,12 +80,17 @@ export default function CreateUser() {
       setError(false);
       setShowSuccessMessage(true);
 
+      const id = uuidv4(); // Generate a random id
+
       // Create an object with the submitted values
       const submittedData = {
         givenName: givenName,
         surname: surname,
         userPrincipalName: userPrincipalName,
         mobile: mobile,
+        jobTitle: jobTitle,
+        id: id,
+        mail: userPrincipalName
       };
 
       setConsultant(submittedData); // Save the submitted object in the consultant state
@@ -157,6 +169,18 @@ export default function CreateUser() {
               onChange={handleSurname}
               className="input border-2 border-gray-900 rounded-md"
               value={surname}
+              type="text"
+            />
+          </div>
+
+          <div className="flex flex-col max-w-[224px]">
+            <label className="label font-semibold text-lg flex justify-start mr-4">
+              Titel
+            </label>
+            <input
+              onChange={handleJobTitle}
+              className="input border-2 border-gray-900 rounded-md"
+              value={jobTitle}
               type="text"
             />
           </div>
