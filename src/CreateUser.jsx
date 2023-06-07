@@ -5,6 +5,7 @@ export default function CreateUser() {
   const [givenName, setGivenName] = useState("");
   const [surname, setSurname] = useState("");
   const [userPrincipalName, setUserPrincipalName] = useState("");
+  const [mobile, setMobile] = useState("");
 
   // States for checking the errors
   const [submitted, setSubmitted] = useState(false);
@@ -38,6 +39,20 @@ export default function CreateUser() {
     updateUPN(givenName, e.target.value); // Update email based on new surname
   };
 
+  const handleMobile = (e) => {
+    const phoneNumber = e.target.value;
+    const formattedPhoneNumber = phoneNumber.startsWith("0")
+      ? "+46" + phoneNumber.slice(1)
+      : phoneNumber;
+
+
+    setMobile(formattedPhoneNumber);
+    setSubmitted(false);
+    setShowSuccessMessage(false);
+    setShowErrorMessage(false);
+    
+  };
+
   // Function to update the email based on first name and surname
   const updateUPN = (givenName, surname) => {
     const initials =
@@ -50,7 +65,7 @@ export default function CreateUser() {
   // Handling the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (givenName === "" || surname === "" || userPrincipalName === "") {
+    if (givenName === "" || surname === "" || userPrincipalName === "" || mobile === "") {
       setError(true);
       setShowErrorMessage(true);
     } else {
@@ -63,6 +78,7 @@ export default function CreateUser() {
         givenName: givenName,
         surname: surname,
         userPrincipalName: userPrincipalName,
+        mobile: mobile,
       };
 
       setConsultant(submittedData); // Save the submitted object in the consultant state
@@ -72,6 +88,7 @@ export default function CreateUser() {
       setGivenName(""); // Reset givenName to empty string
       setSurname(""); // Reset surname to empty string
       setUserPrincipalName(""); // Reset email to empty string
+      setMobile("");
     }
   };
 
@@ -140,6 +157,18 @@ export default function CreateUser() {
               onChange={handleSurname}
               className="input border-2 border-gray-900 rounded-md"
               value={surname}
+              type="text"
+            />
+          </div>
+
+          <div className="flex flex-col max-w-[224px]">
+            <label className="label font-semibold text-lg flex justify-start mr-4">
+              Telefonnummer
+            </label>
+            <input
+              onChange={handleMobile}
+              className="input border-2 border-gray-900 rounded-md"
+              value={mobile}
               type="text"
             />
           </div>
