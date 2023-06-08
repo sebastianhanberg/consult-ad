@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+
+
+
 export default function CreateUser() {
   // States for registration
   const [givenName, setGivenName] = useState("");
@@ -44,7 +47,7 @@ export default function CreateUser() {
 
   const handleMobile = (e) => {
     const phoneNumber = e.target.value;
-    const formattedPhoneNumber = phoneNumber.startsWith("0")
+    const formattedPhoneNumber = phoneNumber.startsWith("0") || phoneNumber.startsWith("1") || phoneNumber.startsWith("2") || phoneNumber.startsWith("3") || phoneNumber.startsWith("4") || phoneNumber.startsWith("5") || phoneNumber.startsWith("6") || phoneNumber.startsWith("7") || phoneNumber.startsWith("8") || phoneNumber.startsWith("9")
       ? "+46" + phoneNumber.slice(1)
       : phoneNumber;
 
@@ -104,6 +107,9 @@ export default function CreateUser() {
     }
   };
 
+
+  
+
   // Showing success message
   const successMessage = () => {
     if (submitted && consultant) {
@@ -132,6 +138,10 @@ export default function CreateUser() {
       </div>
     );
   };
+
+
+ 
+  
 
   return (
     <div className="form">
